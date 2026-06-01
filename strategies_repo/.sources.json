@@ -1,0 +1,33 @@
+{
+  "vnpy": {
+    "name": "vnpy",
+    "url": "https://github.com/vnpy/vnpy_ctastrategy.git",
+    "type": "github",
+    "last_commit": null,
+    "last_sync": null,
+    "strategies_count": 0
+  },
+  "gitee-vnpy": {
+    "name": "gitee-vnpy",
+    "url": "https://gitee.com/vnpy/vnpy.git",
+    "type": "github",
+    "last_commit": null,
+    "last_sync": null,
+    "strategies_count": 0
+  },
+  "freqtrade-strategies": {
+    "name": "freqtrade-strategies",
+    "url": "https://github.com/freqtrade/freqtrade-strategies.git",
+    "type": "github",
+    "last_commit": null,
+    "last_sync": null,
+    "strategies_count": 0
+  },
+  "tradingview": {
+    "name": "tradingview",
+    "url": "https://www.tradingview.com/scripts/",
+    "type": "web",
+    "last_sync": null,
+    "strategies_count": 0
+  }
+}

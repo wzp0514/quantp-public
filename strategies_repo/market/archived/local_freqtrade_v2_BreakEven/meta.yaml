@@ -1,0 +1,35 @@
+_category: market
+_path: ./strategies_repo\market\local_freqtrade_v2_BreakEven
+archived_date: '2026-05-26'
+archived_reason: Freqtrade加密策略，不适合A股
+archived_tags:
+- archived:passed
+archived_tier: archived
+created: '2026-05-23'
+description: 'author@: lenik
+
+
+  Sometimes I want to close the bot ASAP, but not have the positions floating around.
+
+
+  I can "/stopbuy" and wait for the positions to get closed by the bot rules, which
+  is
+
+  waiting for so'
+last_backtest: null
+metrics:
+  annual_return: null
+  drawdown: null
+  sharpe: null
+  total_trades: null
+  win_rate: null
+name: local_freqtrade_v2_BreakEven
+params: {}
+source: 本地-freqtrade_v2
+source_url: https://github.com/freqtrade/freqtrade-strategies
+tags:
+- local
+- freqtrade_v2
+- 止损
+- ML
+type: unknown

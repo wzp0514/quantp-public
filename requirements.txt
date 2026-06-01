@@ -1,0 +1,27 @@
+backtrader
+akshare
+numpy
+pandas
+matplotlib
+ccxt
+streamlit
+jupyterlab
+pyyaml
+requests
+beautifulsoup4
+# ============================================================
+# 可选依赖（安装失败不影响核心功能）
+# ============================================================
+# 安装方法: pip install <包名>
+# 不装也能用，对应功能会自动降级或静默跳过
+#
+# tushare     # A股分钟级数据（¥200/年Token）
+# baostock    # A股历史日线免费备选数据源
+# vnpy        # A股/期货实盘交易（需要实盘账户）
+# vectorbt    # 向量化回测加速（比Backtrader快100x）
+# openai      # 如果用 OpenAI 而非 DeepSeek 做因子挖掘
+#              # （默认用 DeepSeek API，只需 urllib，无需额外安装）
+# anthropic   # Anthropic Claude API（Agent决策层LLM驱动）
+# langgraph   # Agent决策层状态图编排
+# langgraph-checkpoint  # LangGraph检查点持久化
+# pydantic    # Agent决策层结构化输出

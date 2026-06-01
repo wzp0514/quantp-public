@@ -1,0 +1,28 @@
+# 策略参数配置
+
+strategies:
+  ma_cross:
+    enabled: false
+    fast_period: 5
+    slow_period: 20
+
+  bollinger:
+    enabled: false
+    period: 20
+    std_dev: 2.0
+
+  momentum:
+    enabled: false
+    lookback: 6
+    top_n: 10
+
+  mean_revert:
+    enabled: false
+    lookback: 20
+    threshold: 2.0
+
+  grid:
+    enabled: false
+    grid_count: 10
+    upper_pct: 0.10
+    lower_pct: -0.10

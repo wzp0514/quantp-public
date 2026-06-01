@@ -1,0 +1,29 @@
+_category: market
+_path: ./strategies_repo\market\local_freqtrade_ASDTSRockwellTrading
+archived_date: '2026-05-26'
+archived_reason: Freqtrade加密策略，不适合A股
+archived_tags:
+- archived:passed
+archived_tier: archived
+created: '2026-05-23'
+description: "trading strategy based on the concept explained at https://www.youtube.com/watch?v=mmAWVmKN4J0\n\
+  author@: Gert Wohlgemuth\n\nidea:\n\n    uptrend definition:\n        MACD above\
+  \ 0 line AND above MACD signal\n"
+last_backtest: null
+metrics:
+  annual_return: null
+  drawdown: null
+  sharpe: null
+  total_trades: null
+  win_rate: null
+name: local_freqtrade_ASDTSRockwellTrading
+params: {}
+source: 本地-freqtrade
+source_url: https://github.com/freqtrade/freqtrade-strategies
+tags:
+- local
+- freqtrade
+- 均线
+- MACD
+- ML
+type: 趋势跟踪

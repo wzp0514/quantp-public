@@ -1,0 +1,24 @@
+_category: market
+_path: ./strategies_repo\market\Freqtrade RSI
+archived_date: '2026-05-26'
+archived_reason: 已注册ALL_STRATEGIES，可运行回测
+archived_tags: []
+archived_tier: active
+created: '2026-05-23'
+description: RSI<30超卖买入，RSI>70超买卖出
+last_backtest: null
+metrics:
+  annual_return: null
+  drawdown: null
+  sharpe: null
+  total_trades: null
+  win_rate: null
+name: Freqtrade RSI
+params:
+  overbought: 70
+  oversold: 30
+  rsi_period: 14
+source: Freqtrade 社区
+source_url: https://github.com/freqtrade/freqtrade
+tags: []
+type: 均值回归

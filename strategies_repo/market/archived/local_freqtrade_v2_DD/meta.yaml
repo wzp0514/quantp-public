@@ -1,0 +1,32 @@
+_category: market
+_path: ./strategies_repo\market\local_freqtrade_v2_DD
+archived_date: '2026-05-26'
+archived_reason: Freqtrade加密策略，不适合A股
+archived_tags:
+- archived:passed
+archived_tier: archived
+created: '2026-05-23'
+description: 'author@: Gert Wohlgemuth
+
+
+  converted from:
+
+
+  https://github.com/sthewissen/Mynt/blob/master/src/Mynt.Core/Strategies/BbandRsi.cs'
+last_backtest: null
+metrics:
+  annual_return: null
+  drawdown: null
+  sharpe: null
+  total_trades: null
+  win_rate: null
+name: local_freqtrade_v2_DD
+params: {}
+source: 本地-freqtrade_v2
+source_url: https://github.com/freqtrade/freqtrade-strategies
+tags:
+- local
+- freqtrade_v2
+- 均线
+- RSI
+type: 均值回归

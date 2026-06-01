@@ -1,0 +1,26 @@
+_category: market
+_path: ./strategies_repo\market\local_freqtrade_v3_ClucHAnix
+archived_date: '2026-05-26'
+archived_reason: Freqtrade加密策略，不适合A股
+archived_tags:
+- archived:passed
+archived_tier: archived
+created: '2026-05-23'
+description: 'PASTE OUTPUT FROM HYPEROPT HERE
+
+  Can be overridden for specific sub-strategies (stake currencies) at the bottom.'
+last_backtest: null
+metrics:
+  annual_return: null
+  drawdown: null
+  sharpe: null
+  total_trades: null
+  win_rate: null
+name: local_freqtrade_v3_ClucHAnix
+params: {}
+source: 本地-freqtrade_v3
+source_url: https://github.com/freqtrade/freqtrade-strategies
+tags:
+- local
+- freqtrade_v3
+type: unknown

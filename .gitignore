@@ -1,0 +1,46 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Logs
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test cache
+.pytest_cache/
+
+# Auto-generated exports
+exported/
+
+# Generated reports
+reports/
+
+# Local data files (user's own data)
+*.csv
+*.parquet
+*.h5
+*.db
+*.sqlite
+*.jsonl
+
+# Generated images
+*.png
+*.jpg
+

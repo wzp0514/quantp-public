@@ -1,0 +1,34 @@
+_category: market
+_path: ./strategies_repo\market\local_freqtrade_v3_KAMACCIRSInew
+archived_date: '2026-05-26'
+archived_reason: Freqtrade加密策略，不适合A股
+archived_tags:
+- archived:passed
+archived_tier: archived
+created: '2026-05-23'
+description: 'author@: werkkrew
+
+  github@: https://github.com/werkkrew/freqtrade-strategies
+
+
+  Strategy using 3 indicators with fully customizable parameters and full hyperopt
+  support
+
+  including indicator periods as wel'
+last_backtest: null
+metrics:
+  annual_return: null
+  drawdown: null
+  sharpe: null
+  total_trades: null
+  win_rate: null
+name: local_freqtrade_v3_KAMACCIRSInew
+params: {}
+source: 本地-freqtrade_v3
+source_url: https://github.com/freqtrade/freqtrade-strategies
+tags:
+- local
+- freqtrade_v3
+- 均线
+- RSI
+type: 均值回归

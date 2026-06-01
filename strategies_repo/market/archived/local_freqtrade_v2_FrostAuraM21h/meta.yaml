@@ -1,0 +1,29 @@
+_category: market
+_path: ./strategies_repo\market\local_freqtrade_v2_FrostAuraM21h
+archived_date: '2026-05-26'
+archived_reason: Freqtrade加密策略，不适合A股
+archived_tags:
+- archived:passed
+archived_tier: archived
+created: '2026-05-23'
+description: "This is FrostAura's mark 2 strategy which aims to make purchase decisions\n\
+  based on the Stochastic and RSI.\n\nLast Optimization:\n    Sharpe Ratio    : 6.24747%\
+  \ (prev 6.41952)\n    Profit %        : 1537."
+last_backtest: null
+metrics:
+  annual_return: null
+  drawdown: null
+  sharpe: null
+  total_trades: null
+  win_rate: null
+name: local_freqtrade_v2_FrostAuraM21h
+params: {}
+source: 本地-freqtrade_v2
+source_url: https://github.com/freqtrade/freqtrade-strategies
+tags:
+- local
+- freqtrade_v2
+- 均线
+- RSI
+- ML
+type: 均值回归

@@ -1,0 +1,25 @@
+_category: market
+_path: ./strategies_repo\market\local_vnpy_cta_AtrRsi
+archived_date: '2026-05-26'
+archived_reason: vnpy策略，待适配A股
+archived_tags: []
+archived_tier: candidate
+created: '2026-05-23'
+description: '本地策略: AtrRsiStrategy'
+last_backtest: null
+metrics:
+  annual_return: null
+  drawdown: null
+  sharpe: null
+  total_trades: null
+  win_rate: null
+name: local_vnpy_cta_AtrRsi
+params: {}
+source: 本地-vnpy_cta
+source_url: https://github.com/vnpy/vnpy
+tags:
+- local
+- vnpy_cta
+- RSI
+- 止损
+type: 均值回归

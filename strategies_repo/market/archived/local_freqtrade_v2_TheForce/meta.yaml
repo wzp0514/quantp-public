@@ -1,0 +1,24 @@
+_category: market
+_path: ./strategies_repo\market\local_freqtrade_v2_TheForce
+archived_date: '2026-05-26'
+archived_reason: Freqtrade加密策略，不适合A股
+archived_tags:
+- archived:passed
+archived_tier: archived
+created: '2026-05-23'
+description: '本地策略: TheForce'
+last_backtest: null
+metrics:
+  annual_return: null
+  drawdown: null
+  sharpe: null
+  total_trades: null
+  win_rate: null
+name: local_freqtrade_v2_TheForce
+params: {}
+source: 本地-freqtrade_v2
+source_url: https://github.com/freqtrade/freqtrade-strategies
+tags:
+- local
+- freqtrade_v2
+type: unknown

@@ -1,0 +1,315 @@
+# ═══════════════════════════════════════════════════════════════
+# 量化鲲鹏 (QuantP) 系统配置
+# ═══════════════════════════════════════════════════════════════
+# 真实密钥/密码请放在 settings.local.yaml（已被 .gitignore 排除，不提交到 Git）
+# 本文件只记录配置项名称和默认值，可安全提交。
+# 所有参数均可在 settings.local.yaml 中覆盖，无需修改本文件。
+# ═══════════════════════════════════════════════════════════════
+
+
+# ═══════════════════════════════════════════════════════════════
+# 0. 系统编码配置
+# ═══════════════════════════════════════════════════════════════
+encoding:
+  default: utf-8                    # 系统默认编码
+  fallback: gbk                     # 备选编码（Windows GBK 兼容）
+  error_mode: replace               # 编码错误处理: strict/ignore/replace
+
+
+# ═══════════════════════════════════════════════════════════════
+# 1. 数据源配置 — 行情从哪里来
+# ═══════════════════════════════════════════════════════════════
+data_sources:
+  # AkShare — 免费开源，覆盖A股/港股/期货/加密等20+品种
+  # 依赖爬虫，源站改版可能导致接口临时失效。日常主力
+  akshare:
+    enabled: true
+
+  # Tushare Pro — 数据质量高，分钟级数据，需注册Token
+  # 基础免费，高级权限 ¥200-2000+/年。作为质量基准和降级备用
+  tushare:
+    enabled: false
+    token: ""            # 在 settings.local.yaml 中填写你的 Token
+
+  # Baostock — 免费A股历史日线，稳定但低频更新
+  # 最后防线，其他源都挂了才用到
+  baostock:
+    enabled: true
+
+  # CCXT — 加密货币统一API标准，覆盖100+交易所
+  # 当前 market.crypto=false，暂不启用
+  ccxt:
+    enabled: false
+
+  # A股数据源优先级：主源 → 降级链 → 质量检查 → 缓存
+  a_share:
+    primary: akshare                                   # 主数据源
+    fallback_chain: [tushare, baostock]                # 主源失败时按顺序降级
+    quality_check: true                                # 拉取后自动检查完整性
+    cache_days: 1                                      # 同一天内不重复拉取（节省API额度）
+
+
+# ═══════════════════════════════════════════════════════════════
+# 2. 市场开关 — 哪些市场参与交易
+# ═══════════════════════════════════════════════════════════════
+markets:
+  A_share: true        # A股（股票/ETF/可转债/指数）
+  crypto: false        # 加密货币（当前决定不碰，相关代码保留但菜单隐藏）
+
+
+# ═══════════════════════════════════════════════════════════════
+# 3. 品种参数 — 不同品种的交易成本和规则差异
+# ═══════════════════════════════════════════════════════════════
+# Pipeline/回测通过 asset_type 参数自动选择对应规则
+# 用法: AShareCommission.for_asset_type("etf")
+#       AShareConstraints.for_asset_type("convertible_bond")
+asset_types:
+
+  # 普通股票（主板/创业板/科创板）
+  stock:
+    commission: 0.00025      # 佣金 万2.5（买卖双向）
+    min_commission: 5.0       # 最低佣金 5元/笔
+    stamp_duty: 0.0005        # 印花税 万5（仅卖出，2023年8月起减半）
+    transfer_fee: 0.00001     # 过户费 万0.1（买卖双向）
+    t_plus: 1                 # T+1：当日买入次日才能卖出
+    price_limit: 0.10         # 涨跌停 ±10%（创业板/科创板 ±20% 通过代码自动判断）
+
+  # ETF（交易型开放式指数基金）
+  etf:
+    commission: 0.00025       # 佣金 万2.5（同股票）
+    min_commission: 5.0        # 最低佣金 5元
+    stamp_duty: 0.0            # ETF免印花税（与股票的唯二关键差异）
+    transfer_fee: 0.00001      # 过户费 万0.1
+    t_plus: 1                  # T+1（同股票）
+    price_limit: 0.10          # 主板ETF ±10%（代码159/588开头→±20%自动判断）
+
+  # 可转债
+  convertible_bond:
+    commission: 0.00005       # 佣金 万0.5（远低于股票）
+    min_commission: 1.0        # 最低佣金 1元
+    stamp_duty: 0.0            # 免印花税
+    transfer_fee: 0.0          # 免过户费
+    t_plus: 0                  # T+0：当日买入当日即可卖出
+    price_limit: 0.0           # 无涨跌停限制（0表示不检查）
+
+
+# ═══════════════════════════════════════════════════════════════
+# 4. 风控参数 — 实盘硬约束，不可手动绕过
+# ═══════════════════════════════════════════════════════════════
+# 所有参数均有保守型建议值（注释中），新手建议用保守型
+# 每项背后都有真实亏钱案例作为参照
+# P1-P3: 三套预设（conservative/neutral/aggressive）+ 补充参数 + active_preset 切换
+risk:
+
+  # P2: 当前启用的风控预设（test 和 live 共用，仅 demo 可独立覆盖）
+  active_preset: neutral
+
+  # P1: 三套预设 — 16项参数分三档
+  presets:
+    conservative:     # 保守型：适合新手/小资金/保本优先
+      max_position_pct: 0.10         # 单策略仓位上限 10%
+      max_single_loss_pct: 0.01      # 单笔止损 1%
+      max_daily_loss_pct: 0.02       # 日亏损熔断 2%
+      max_drawdown_pct: 0.10         # 总回撤报废 10%
+      stop_after_n_losses: 3         # 连续亏损暂停 3 笔
+      max_symbols: 3                 # 同时持仓品种上限
+      max_single_symbol_pct: 0.30    # 单一品种仓位上限
+      max_daily_trades: 5            # 每日最大交易笔数
+      no_leverage: true              # 禁止杠杆
+      vol_adaptive_position: true    # 波动率自适应仓位（高波动缩仓）
+      correlation_limit: 0.7         # 持仓相关性上限（超此值减仓）
+      liquidity_min_volume: 5_000_000  # 最低日均成交额（元）
+
+    neutral:          # 中性：有经验的交易者
+      max_position_pct: 0.20
+      max_single_loss_pct: 0.02
+      max_daily_loss_pct: 0.05
+      max_drawdown_pct: 0.15
+      stop_after_n_losses: 5
+      max_symbols: 5
+      max_single_symbol_pct: 0.25
+      max_daily_trades: 10
+      no_leverage: true
+      vol_adaptive_position: true
+      correlation_limit: 0.80
+      liquidity_min_volume: 3_000_000
+
+    aggressive:       # 激进型：老手/大资金/愿意承担更多风险（不推荐新手）
+      max_position_pct: 0.35
+      max_single_loss_pct: 0.03
+      max_daily_loss_pct: 0.08
+      max_drawdown_pct: 0.25
+      stop_after_n_losses: 8
+      max_symbols: 10
+      max_single_symbol_pct: 0.20
+      max_daily_trades: 20
+      no_leverage: false             # 允许杠杆（⚠️ 高风险）
+      vol_adaptive_position: false
+      correlation_limit: 0.90
+      liquidity_min_volume: 1_000_000
+
+  # P5: 全局风控开关
+  enable_risk_engine: true          # 风控引擎总开关（false=关闭所有风控，仅测试用）
+  auto_circuit_breaker: true        # 自动熔断（触发条件后自动暂停交易）
+  notify_on_breach: true            # 风控触发时发送通知
+  breach_cooldown_h: 4              # 熔断冷却时间（小时），冷却期内不可恢复
+
+
+# ═══════════════════════════════════════════════════════════════
+# 5. 另类数据 — 非行情数据源的权重配置
+# ═══════════════════════════════════════════════════════════════
+# 4个源等权融合 → 综合风险评分(0-100) → 仓位建议
+# 权重 = 0 表示禁用该数据源；总和自动归一化
+alternative_data:
+  news_sentiment: 0.25          # 新闻情绪（东方财富/证券时报/华尔街见闻 RSS）
+  geopolitical: 0.25            # 地缘政治风险（Reuters/BBC/新华社 RSS，三级关键词打分）
+  xueqiu_sentiment: 0.25        # 雪球社区情绪（热帖+个股讨论，多空关键词）
+  earnings_quality: 0.25        # 财报质量（营收/利润增长率+ROE+毛利率，A-D评级）
+  confidence_threshold: 0.3     # 置信度低于此值的数据源自动降权50%
+
+
+# ═══════════════════════════════════════════════════════════════
+# 6. 研究源头 — 管线外部新鲜输入的来源和参数
+# ═══════════════════════════════════════════════════════════════
+# CI/CD管线通过 ResearchSource 扫描外部变化，自动生成研究信号
+research_source:
+
+  # arXiv学术论文 — 扫q-fin新论文，提取可复现的因子/策略
+  arxiv:
+    enabled: true
+    max_results: 5              # 每次扫描取最新 N 篇
+    categories: ["q-fin.PM", "q-fin.ST", "q-fin.TR"]  # 组合管理/统计金融/交易与市场微观结构
+
+  # 数据新鲜度 — 检测数据源是否健康、数据是否滞后
+  data_freshness:
+    enabled: true
+    max_staleness_days: 3       # 最新数据超过此天数视为滞后
+
+  # 市场结构变化 — 检测波动率突变和收益结构断点
+  regime_change:
+    enabled: true
+    vol_spike_ratio: 2.0        # 近期波动率/历史波动率 > 此值视为飙升
+
+  # 另类数据触发 — 情绪极端/地缘升级时触发告警
+  alternative:
+    enabled: true
+    risk_alert_threshold: 50    # 综合风险分 > 此值触发告警（建议减仓）
+
+  # 策略健康反馈 — 检测已有策略是否退化
+  strategy_health:
+    enabled: true
+    decay_threshold: 0.5        # 夏普比率退化超过此比例触发策略刷新
+    min_ic: 0.02                # 因子 |IC| 低于此值视为失效，建议淘汰
+
+  # 日历事件 — 财报季/指数调仓等周期性提醒
+  calendar:
+    enabled: true
+
+  # 噪声控制 — 防止假信号和过拟合
+  noise_control:
+    min_confidence: 0.3         # 信号置信度门槛（低于此值丢弃）
+    fwer_alpha: 0.05            # Bonferroni多重比较校正alpha
+    cooldown_hours: 24          # 同源同类信号冷静期（避免重复触发）
+    min_ic_validation: 0.03     # arXiv/LLM因子最低IC阈值（低于此值不入库）
+
+
+# ═══════════════════════════════════════════════════════════════
+# 7. 回测参数 — 交易成本和基准利率
+# ═══════════════════════════════════════════════════════════════
+# 注意：品种级成本参数在 asset_types 段中，由 for_asset_type() 自动读取
+# 此段为全局默认值（当 asset_types 未配置时兜底）
+backtest:
+  commission: 0.00025           # 佣金率 万2.5
+  stamp_duty: 0.0005            # 印花税 万5（仅卖出，2023年8月起）
+  slippage: 0.001               # 滑点 0.1%（固定比例）
+  risk_free_rate: 0.025         # 无风险利率 2.5%（2026年中国10年期国债收益率）
+
+
+# ═══════════════════════════════════════════════════════════════
+# 8. LLM配置 — DeepSeek API（因子挖掘/论文提取）
+# ═══════════════════════════════════════════════════════════════
+# llm:
+#   provider: deepseek
+#   api_key: ""                  # 在 settings.local.yaml 中填写
+#   model: deepseek-chat
+#   temperature: 0.7
+#   max_tokens: 4000
+
+
+# ═══════════════════════════════════════════════════════════════
+# 9. Agent决策层配置 — 多Agent LLM分析-辩论-决策
+# ═══════════════════════════════════════════════════════════════
+# agent_decision:
+#   default_provider: deepseek       # 默认LLM provider
+#   default_model: deepseek-chat     # 默认模型
+#   temperature: 0.3                 # 决策场景用低温度（减少随机性）
+#   max_tokens: 1000
+#   rule_based_fallback: true        # LLM不可用时自动回退规则引擎
+#   decision_log_path: data/vault/vault_data/agent_decisions.db
+
+# ═══════════════════════════════════════════════════════════════
+# 10. 通知渠道 — 实盘异常告警
+# ═══════════════════════════════════════════════════════════════
+# notification:
+#   telegram_bot_token: ""      # 在 settings.local.yaml 中填写
+#   wecom_webhook: ""            # 企业微信机器人webhook
+#   dingtalk_webhook: ""         # 钉钉机器人webhook
+#   feishu_webhook: ""           # 飞书机器人webhook
+
+
+# ═══════════════════════════════════════════════════════════════
+# 11. 纸上交易配置 — 虚拟盘参数（不接实盘时的增强方案）
+# ═══════════════════════════════════════════════════════════════
+paper_trading:
+  poll_interval_seconds: 5         # 实时行情轮询间隔
+  trading_hours:
+    morning: ["09:30", "11:30"]
+    afternoon: ["13:00", "15:00"]
+  default_cash: 100000.0           # 每策略默认初始资金
+  daemon:
+    poll_interval: 5               # 行情轮询间隔(秒)
+    report_dir: "reports/paper"    # 周期性报告存储目录
+    daily_report_time: "15:30"     # 每日收盘后生成报告时间
+    auto_resume: true              # 启动时自动恢复未完成实例
+    max_instances: 20              # 最多同时运行实例数
+  league:
+    default_strategies: ["双均线交叉", "布林带回归", "海龟交易法则"]
+    leaderboard_top_n: 10
+
+
+# ═══════════════════════════════════════════════════════════════
+# 12. Kronos 量化K线预测模型 — 自回归Transformer价格预测
+# ═══════════════════════════════════════════════════════════════
+# Kronos 是一个基于 BSQ(Binary Spherical Quantization)离散token
+# 的自回归Transformer，将K线数据编码为分层token后预测未来价格序列。
+# 项目地址: https://github.com/NeoQuasar/Kronos
+kronos:
+  # 模型选择
+  model: small                   # mini(4M)/small(25M)/base(102M)
+  device: auto                   # auto/cuda/mps/cpu
+  max_context: 512               # 模型最大上下文窗口(token数)
+  cache_ttl: 3600                # 推理结果缓存有效期(秒)，0=禁用
+
+  # 功能开关 — 所有Kronos功能默认关闭，需在 settings.local.yaml 手动开启
+  source_enabled: false          # 信号源节点总开关
+  factor_registration: false     # 因子自动入库开关(P3)
+  l4_agent: false                # L4 Agent决策接入开关(P3)
+  risk_guard: false              # guardian风险预警接入开关(P3)
+  webui_enabled: false           # WebUI预测可视化开关(P3)
+  token_analysis: false          # Token熵分析开关(P3)
+
+  # 预测参数
+  pred_len: 20                   # 默认预测步数(K线根数)
+  T: 1.0                         # 采样温度(>1=更随机，<1=更确定)
+  top_p: 0.9                     # nucleus sampling概率阈值
+  top_k: 0                       # top-k采样(0=禁用)
+  sample_count: 5                # 蒙特卡洛采样次数(>1取平均降低方差)
+  lookback: 60                   # 默认回看窗口(K线根数)
+
+  # 因子参数
+  ic_threshold: 0.03             # 因子IC最低阈值(|IC|>此值入库+创建Track)
+
+  # 模型路径(为空则从 HuggingFace Hub 自动下载)
+  tokenizer_path: ""             # 本地tokenizer路径，留空="NeoQuasar/Kronos-Tokenizer-base"
+  model_path: ""                 # 本地模型路径，留空=按model大小自动选择HF repo
+  project_path: ""               # Kronos项目根目录(需pip install或克隆后指定路径)

@@ -1,0 +1,23 @@
+_category: market
+_path: ./strategies_repo\market\local_vnpy_main_EquityDemo
+archived_date: '2026-05-26'
+archived_reason: vnpy策略，待适配A股
+archived_tags: []
+archived_tier: candidate
+created: '2026-05-23'
+description: Equity Long-Only Demo Strategy
+last_backtest: null
+metrics:
+  annual_return: null
+  drawdown: null
+  sharpe: null
+  total_trades: null
+  win_rate: null
+name: local_vnpy_main_EquityDemo
+params: {}
+source: 本地-vnpy_main
+source_url: https://github.com/vnpy/vnpy
+tags:
+- local
+- vnpy_main
+type: unknown
